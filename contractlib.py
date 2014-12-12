@@ -45,7 +45,7 @@ class ContractPart:
         return result
 
     def getData(self, key):
-        #gets data from above self.table; nym,
+        # gets data from above self.table; nym,
         # item, price, etc... must be in str
         return self.table[key]
 
@@ -57,20 +57,28 @@ class Contract():
                  sign_state="", seller_sig="",
                  buyer_sig="", notary_sig="",
                  contract_exp=""):
-        #raw data
+        
+        # order details
+        self.item = item
+        self.price = price
+        self.coin = self.seller.currency #get contract's transacting currency
+
+        # nyms
         self.seller_nym = seller_nym
         self.buyer_nym = buyer_nym
         self.notary_nym = notary_nym
-        self.item = item
-        self.price = price
-        self.contract_exp = ""
-        self.sign_state = sign_state
+
+        # sigs
         self.seller_sig = seller_sig
         self.buyer_sig = buyer_sig
         self.notary_sig = notary_sig
-        self.contract_hash = ""
 
-        #initiaize ContractPart(s)
+        # metadata
+        self.sign_state = sign_state
+        self.contract_hash = ""
+        self.contract_exp = ""
+
+        # initiaize ContractPart(s)
         
         #seller
         self.seller = ContractPart(self.seller_nym, self.item,
@@ -85,14 +93,15 @@ class Contract():
                                    self.price, self.notary_sig,
                                    self.contract_exp, "NOTARY")
 
-        #get contract's transacting currency
-        self.coin = self.seller.currency
+        
         
     def getXML(self):
-        #get separate XML objects
+
+        # get separate XML objects
         seller_part = self.seller.xml_conv()
         buyer_part = self.buyer.xml_conv()
         notary_part = self.notary.xml_conv()
+
         #initialize containers
         result = ""
         base = [seller_part, buyer_part, notary_part]
@@ -100,7 +109,7 @@ class Contract():
                     "xml_head" : "<root>",
                     "xml_foot" : "</root>"
                     }
-        #manipulate data
+        # manipulate data
         result = result + wrappers["xml_head"]
         for item in base:
             if "<nym></nym>" in item:
