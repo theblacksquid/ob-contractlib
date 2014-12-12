@@ -65,3 +65,4 @@ class Trade:
         *TRIPLE-SIGNED/P.REF - Signed by all parties. Partial 
                                refund sent to buyer
         """
+        pass
