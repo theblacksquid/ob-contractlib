@@ -33,12 +33,12 @@ class Trade:
     def update_hash(self):
         # update the contract hash at 
         # the foot of the contract
-        pass
-
-    def changeState(self):
-        """
+        pass                      # please correct me
+                                  # if I misunderstood
+    def changeState(self, state): # some RC concepts
+        """                       
         changes the contract state into (but not limited to) 
-        any of the given :
+        any of the given states:
         
         *NO-SIGN - The contract does not have 
                    any of the partcipants' sigs
@@ -65,4 +65,19 @@ class Trade:
         *TRIPLE-SIGNED/P.REF - Signed by all parties. Partial 
                                refund sent to buyer
         """
-        pass
+        self.state = state
+
+        
+class Seller:
+
+    def __init__(self, nym, sig):
+        self.nym = nym
+        self.sig = sig
+
+    def makeContract(self, item_name, item_price, currency):
+        slrContract = Contract(seller_nym = self.nym,
+                               item = item_name,
+                               price = item_price,
+                               seller_sig = self.sig)
+        return slrContract
+        
