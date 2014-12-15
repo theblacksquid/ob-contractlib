@@ -57,7 +57,20 @@ class Contract():
                  sign_state="", seller_sig="",
                  buyer_sig="", notary_sig="",
                  contract_exp=""):
+        # initiaize ContractPart(s)
         
+        #seller
+        self.seller = ContractPart(self.seller_nym, self.item,
+                                   self.price, self.seller_sig,
+                                   self.contract_exp, "SELLER")
+        #buyer
+        self.buyer = ContractPart(self.buyer_nym, self.item,
+                                  self.price, self.buyer_sig,
+                                  self.contract_exp, "BUYER")
+        #notary
+        self.notary = ContractPart(self.notary_nym, self.item,
+                                   self.price, self.notary_sig,
+                                   self.contract_exp, "NOTARY")
         # order details
         self.item = item
         self.price = price
@@ -77,23 +90,6 @@ class Contract():
         self.sign_state = sign_state
         self.contract_hash = ""
         self.contract_exp = ""
-
-        # initiaize ContractPart(s)
-        
-        #seller
-        self.seller = ContractPart(self.seller_nym, self.item,
-                                   self.price, self.seller_sig,
-                                   self.contract_exp, "SELLER")
-        #buyer
-        self.buyer = ContractPart(self.buyer_nym, self.item,
-                                  self.price, self.buyer_sig,
-                                  self.contract_exp, "BUYER")
-        #notary
-        self.notary = ContractPart(self.notary_nym, self.item,
-                                   self.price, self.notary_sig,
-                                   self.contract_exp, "NOTARY")
-
-        
         
     def getXML(self):
 
@@ -117,5 +113,5 @@ class Contract():
             else:
                 result = result + item
         result = result + wrappers["xml_foot"]
-        return result   #We have to add how to add self.contract_hash
-                        #when its changes every time info is added/changed
+        return result   # Contract.contract_hash will be updated by
+                        # sign methods provided in tradelib.py
