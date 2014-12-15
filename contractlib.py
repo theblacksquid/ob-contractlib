@@ -56,26 +56,13 @@ class Contract():
                  notary_nym="", item="", price="",
                  sign_state="", seller_sig="",
                  buyer_sig="", notary_sig="",
-                 contract_exp=""):
-        # initiaize ContractPart(s)
-        
-        #seller
-        self.seller = ContractPart(self.seller_nym, self.item,
-                                   self.price, self.seller_sig,
-                                   self.contract_exp, "SELLER")
-        #buyer
-        self.buyer = ContractPart(self.buyer_nym, self.item,
-                                  self.price, self.buyer_sig,
-                                  self.contract_exp, "BUYER")
-        #notary
-        self.notary = ContractPart(self.notary_nym, self.item,
-                                   self.price, self.notary_sig,
-                                   self.contract_exp, "NOTARY")
+                 contract_exp="", coin):
+
         # order details
         self.item = item
         self.price = price
-        self.coin = self.seller.currency #get contract's transacting currency
-
+        self.coin = coin
+        
         # nyms
         self.seller_nym = seller_nym
         self.buyer_nym = buyer_nym
@@ -85,12 +72,27 @@ class Contract():
         self.seller_sig = seller_sig
         self.buyer_sig = buyer_sig
         self.notary_sig = notary_sig
-
+        
+        # initiaize ContractPart(s)
+        
+        #seller
+        self.seller = ContractPart(self.seller_nym, self.item,
+                                   self.price, self.seller_sig,
+                                   self.contract_exp, "SELLER",
+                                   self.coin)
+        #buyer
+        self.buyer = ContractPart(self.buyer_nym, self.item,
+                                  self.price, self.buyer_sig,
+                                  self.contract_exp, "BUYER")
+        #notary
+        self.notary = ContractPart(self.notary_nym, self.item,
+                                   self.price, self.notary_sig,
+                                   self.contract_exp, "NOTARY")
         # metadata
         self.sign_state = sign_state
         self.contract_hash = ""
         self.contract_exp = ""
-        
+                                   
     def getXML(self):
 
         # get separate XML objects
