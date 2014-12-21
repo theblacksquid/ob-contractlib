@@ -155,8 +155,8 @@ class Contract():
                         "est_delivery" : "%s" % self.eta,
                         "shipping_fee" : "%s" % self.ship_fee
                         }
+                    }
                 }
-            }
         self.sellerPart = {
             "MerchantPart" : {
                 "Merchant_ID" : "%s" % self.seller_nym,
@@ -164,9 +164,9 @@ class Contract():
                     "Hash" : "%s" % self.seller_hashID,
                     "GPG" : "%s" % self.seller_gpg,
                     "secp256k1" : "%s" % self.seller_secp
+                    }
                 }
             }
-        }
             
                 
         self.buyerPart = {
@@ -177,8 +177,8 @@ class Contract():
                     "GPG" : "%s" % self.buyer_gpg,
                     "secp256k1" : "%s" % self.buyer_secp
                     }
+                }
             }
-        }
             
         self.notaryPart = {
             "NotaryPart" : {
@@ -188,8 +188,8 @@ class Contract():
                     "GPG" : "%s" % self.notary_gpg,
                     "secp256k1" : "%s" % self.notary_secp
                     }
+                }
             }
-        }
                                    
     def getJSON(self):
         # initialize containers
