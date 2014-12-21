@@ -130,41 +130,40 @@ class Contract():
                                    hashID = self.notary_hashID,)
         self.genPart = {
                 "GenesisPart" : {
-                
-                "metadata" : {
-                    "OBCv" : "%s" % self.contract_ver,
-                    "Category" : "%s" % self.category,
-                    "subCategory" : "%s" % self.subCategory,
-                    "Expiration_Date" : "%s" % self.contract_exp
-                    },
-                
-                "nonce" : "", # Wouldn't it be a good idea to keep a
-                              # chain of nonces to track the history of changes
-                              # to the current contract?                     
-                "item_data" : {
-                    "item_title" : "%s" % self.item,
-                    "%s_price" % self.coin : "0.00 %s" % self.coin,
-                    "fiat_price" : "", ##
-                    # Are we going to use a
-                    # standard API for getting fiat prices?
-                    "item_image" : "%s" % self.img,
-                    "item_condition" : "%s" % self.cond,
-                    "quantity" : "%s" % self.qty,
-                    "keywords" : "%s" % self.kword,
-                    "region" : "%s" % self.region,
-                    "est_delivery" : "%s" % self.eta,
-                    "shipping_fee" : "%s" % self.ship_fee
-                    }
+                    
+                    "metadata" : {
+                        "OBCv" : "%s" % self.contract_ver,
+                        "Category" : "%s" % self.category,
+                        "subCategory" : "%s" % self.subCategory,
+                        "Expiration_Date" : "%s" % self.contract_exp
+                        },
+                    
+                    "nonce" : "", # Wouldn't it be a good idea to keep a
+                                  # chain of nonces to track the history of changes
+                                  # to the current contract?                     
+                    "item_data" : {
+                        "item_title" : "%s" % self.item,
+                        "%s_price" % self.coin : "0.00 %s" % self.coin,
+                        "fiat_price" : "", ##
+                        # Are we going to use a
+                        # standard API for getting fiat prices?
+                        "item_image" : "%s" % self.img,
+                        "item_condition" : "%s" % self.cond,
+                        "quantity" : "%s" % self.qty,
+                        "keywords" : "%s" % self.kword,
+                        "region" : "%s" % self.region,
+                        "est_delivery" : "%s" % self.eta,
+                        "shipping_fee" : "%s" % self.ship_fee
+                        }
                 }
             }
         self.sellerPart = {
             "MerchantPart" : {
-
-            "Merchant_ID" : "%s" % self.seller_nym,
-            "signatures" : {
-                "Hash" : "%s" % self.seller_hashID,
-                "GPG" : "%s" % self.seller_gpg,
-                "secp256k1" : "%s" % self.seller_secp
+                "Merchant_ID" : "%s" % self.seller_nym,
+                "signatures" : {
+                    "Hash" : "%s" % self.seller_hashID,
+                    "GPG" : "%s" % self.seller_gpg,
+                    "secp256k1" : "%s" % self.seller_secp
                 }
             }
         }
@@ -172,25 +171,23 @@ class Contract():
                 
         self.buyerPart = {
             "BuyerPart" : {
-
-            "Buyer_ID" : "%s" % self.buyer_nym,
-            "signatures" : {
-                "Hash" : "%s" % self.buyer_hashID,
-                "GPG" : "%s" % self.buyer_gpg,
-                "secp256k1" : "%s" % self.buyer_secp
-                }
+                "Buyer_ID" : "%s" % self.buyer_nym,
+                "signatures" : {
+                    "Hash" : "%s" % self.buyer_hashID,
+                    "GPG" : "%s" % self.buyer_gpg,
+                    "secp256k1" : "%s" % self.buyer_secp
+                    }
             }
         }
             
         self.notaryPart = {
             "NotaryPart" : {
-
-            "Notary_ID" : "%s" % self.notary_nym,
-            "signatures" : {
-                "Hash" : "%s" % self.notary_hashID,
-                "GPG" : "%s" % self.notary_gpg,
-                "secp256k1" : "%s" % self.notary_secp
-                }
+                "Notary_ID" : "%s" % self.notary_nym,
+                "signatures" : {
+                    "Hash" : "%s" % self.notary_hashID,
+                    "GPG" : "%s" % self.notary_gpg,
+                    "secp256k1" : "%s" % self.notary_secp
+                    }
             }
         }
                                    
