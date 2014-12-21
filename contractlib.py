@@ -1,119 +1,228 @@
 # WARNING!!! FULL OF PLACEHOLDERS ("")
-# refactored version of https://gist.github.com/theblacksquid/3301491dd487e6a29802#file-contractlib-py
-# removed repetitive ContractPart subclasses
+import json
+from collections import OrderedDict
 
 class ContractPart:
     '''
        class ContractPart is only a base class for contract
        sub-units, not meant to be instantiated by itself.
     '''
-    def __init__(self, nym, item, price, 
-                 sig="", contract_exp="", party, currency="BTC"):     #param sig & sontract_exp in this 
-        self.nym = nym                         #example are only placeholders
-        self.item = item                       #for someone's pgp key
-        self.currency = currency               #and optional expiration
-        self.price = str(price)+self.currency  #therefore, "" (for now)
-        self.contract_exp = contract_exp       
-        self.sig = sig
-        self.party = party
-        self.table = {
-                      "nym" : self.nym, "item" : self.item,
-                      "price" : self.price, "sig" : self.sig,
+    def __init__(self, nym="", gpgID="", secp="",
+                 hashID="",
+
+                 item="", price="", condition="",
+                 qty="", keyword="", region="",
+                 est_deliv="", ship_fee="",
+                 currency="BTC", item_pic="",
+
+                 contract_exp=""):   
+        self.nym = nym
+        self.gpg = gpgID
+        self.hashID = hashID
+        self.secp = secp
+        
+        self.item = item                       
+        self.currency = currency               
+        self.price = str(price)+self.currency
+        self.cond = condition
+        self.qty = qty
+        self.kword = keyword
+        self.region = region
+        self.eta = est_deliv
+        self.ship = ship_fee
+        self.item_pic = item_pic
+
+        self.contract_exp = contract_exp
+
+        # attr get is used as example.get[query]
+        self.get = {
+                      "item" : self.item, "price" : self.price,
+                      "condition" : self.cond, "quantity" : self.qty,
+                      "keywords" : self.kword, "region" : self.region,
+                      "est_delivery" : self.eta,
+                      "shipping fee" : self.ship,
                       "contract_exp" : self.contract_exp,
-                      "party" : self.party
+                      
+                      "nym" : self.nym, "GPG" : self.gpg,
+                      "secp256k1" : self.secp
                       }
-
-    def json_conv(self):
-        result = ""
-        #convert above info into JSON,
-        return result
-
-    def xml_conv(self):
-        #convert above info into xml,
-        #is a str obj
-        result = ""
-        base =   ["<%s_part>" % self.party,
-                  "<party>%s</party>" % self.party,
-                  "<nym>%s</nym>" % self.nym,
-                  "<item>%s</item>" % self.item,
-                  "<price>%s</price>" % self.price,
-                  "<contract_exp>%s</contract_exp>" % self.contract_exp,
-                  "<sig>%s</sig>" % self.sig,
-                  "</%s_part>" % self.party]
-        for item in base:
-            result = result + item
-        return result
-
-    def getData(self, key):
-        # gets data from above self.table; nym,
-        # item, price, etc... must be in str
-        return self.table[key]
-
-
+# I apologize for the mess in advance
 class Contract():
 
-    def __init__(self, seller_nym="", buyer_nym="",
-                 notary_nym="", item="", price="",
-                 sign_state="", seller_sig="",
-                 buyer_sig="", notary_sig="",
-                 contract_exp="", coin):
+    def __init__(self, seller_nym="", seller_gpg="",
+                 seller_secp="", seller_hashID="",
+
+                 buyer_nym="", buyer_gpg="",
+                 buyer_secp="", buyer_hashID="",
+
+                 notary_nym="", notary_gpg="",
+                 notary_secp="", notary_hashID="",
+
+                 item="", price="", condition="",
+                 item_qty="", keywords="", region="",
+                 ship_fee="", eta="", coin="",
+                 item_img="", 
+
+                 contract_exp="", contract_ver="",
+                 item_category="", subCategory=""):
+        
+        # metadata
+        self.nonce = ""
+        self.contract_exp = contract_exp
+        self.contract_ver = contract_ver
+        self.category = item_category
+        self.subCategory = subCategory
 
         # order details
-        self.item = item
-        self.price = price
-        self.coin = coin
+        self.item = item; self.cond = condition;
+        self.price = price; self.qty = item_qty;
+        self.kword = keywords; self.region = region;
+        self.ship_fee = ship_fee; self.coin = coin;
+        self.img = item_img; self.eta = eta
         
-        # nyms
+        # IDs and sigs from the three parties
+        ####################
+        # seller
         self.seller_nym = seller_nym
-        self.buyer_nym = buyer_nym
-        self.notary_nym = notary_nym
+        self.seller_gpg = seller_gpg
+        self.seller_secp = seller_secp
+        self.seller_hashID = seller_hashID
 
-        # sigs
-        self.seller_sig = seller_sig
-        self.buyer_sig = buyer_sig
-        self.notary_sig = notary_sig
+        # buyer
+        self.buyer_nym = buyer_nym
+        self.buyer_gpg = buyer_gpg
+        self.buyer_secp = buyer_secp
+        self.buyer_hashID = buyer_hashID
+
+        # notary
+        self.notary_nym = notary_nym
+        self.notary_gpg = notary_gpg
+        self.notary_secp = notary_secp
+        self.notary_hashID = notary_hashID
         
         # initiaize ContractPart(s)
-        
-        #seller
-        self.seller = ContractPart(self.seller_nym, self.item,
-                                   self.price, self.seller_sig,
-                                   self.contract_exp, "SELLER",
-                                   self.coin)
-        #buyer
-        self.buyer = ContractPart(self.buyer_nym, self.item,
-                                  self.price, self.buyer_sig,
-                                  self.contract_exp, "BUYER")
-        #notary
-        self.notary = ContractPart(self.notary_nym, self.item,
-                                   self.price, self.notary_sig,
-                                   self.contract_exp, "NOTARY")
-        # metadata
-        self.sign_state = sign_state
-        self.contract_hash = ""
-        self.contract_exp = ""
-                                   
-    def getXML(self):
-
-        # get separate XML objects
-        seller_part = self.seller.xml_conv()
-        buyer_part = self.buyer.xml_conv()
-        notary_part = self.notary.xml_conv()
-
-        #initialize containers
-        result = ""
-        base = [seller_part, buyer_part, notary_part]
-        wrappers = {
-                    "xml_head" : "<root>",
-                    "xml_foot" : "</root>"
+        ####################
+        #genesisPart
+        self.genesis = ContractPart(item = self.item, 
+                                    price = self.price,
+                                    item_pic = self.img,
+                                    condition = self.cond,
+                                    qty = self.qty,
+                                    keyword = self.kword,
+                                    region = self.region,
+                                    est_deliv = self.eta,
+                                    ship_fee = self.ship_fee,
+                                    contract_exp = self.contract_exp)
+        #sellerPart
+        self.seller = ContractPart(nym = self.seller_nym,
+                                   gpgID = self.seller_gpg,
+                                   secp = self.seller_secp,
+                                   hashID = self.seller_hashID,)
+        #buyerPart
+        self.buyer = ContractPart(nym = self.buyer_nym,
+                                  gpgID = self.buyer_gpg,
+                                  secp = self.buyer_secp,
+                                  hashID = self.buyer_hashID,)
+        #notaryPart
+        self.notary = ContractPart(nym = self.notary_nym,
+                                   gpgID = self.notary_gpg,
+                                   secp = self.notary_secp,
+                                   hashID = self.notary_hashID,)
+        self.genPart = {
+                "GenesisPart" : {
+                
+                "metadata" : {
+                    "OBCv" : "%s" % self.contract_ver,
+                    "Category" : "%s" % self.category,
+                    "subCategory" : "%s" % self.subCategory,
+                    "Expiration_Date" : "%s" % self.contract_exp
+                    },
+                
+                "nonce" : "", # Wouldn't it be a good idea to keep a
+                              # chain of nonces to track the history of changes
+                              # to the current contract?                     
+                "item_data" : {
+                    "item_title" : "%s" % self.item,
+                    "%s_price" % self.coin : "0.00 %s" % self.coin,
+                    "fiat_price" : "", ##
+                    # Are we going to use a
+                    # standard API for getting fiat prices?
+                    "item_image" : "%s" % self.img,
+                    "item_condition" : "%s" % self.cond,
+                    "quantity" : "%s" % self.qty,
+                    "keywords" : "%s" % self.kword,
+                    "region" : "%s" % self.region,
+                    "est_delivery" : "%s" % self.eta,
+                    "shipping_fee" : "%s" % self.ship_fee
                     }
-        # manipulate data
-        result = result + wrappers["xml_head"]
-        for item in base:
-            if "<nym></nym>" in item:
-                pass
-            else:
-                result = result + item
-        result = result + wrappers["xml_foot"]
-        return result   # Contract.contract_hash will be updated by
-                        # sign methods provided in tradelib.py
+                }
+            }
+        self.sellerPart = {
+            "MerchantPart" : {
+
+            "Merchant_ID" : "%s" % self.seller_nym,
+            "signatures" : {
+                "Hash" : "%s" % self.seller_hashID,
+                "GPG" : "%s" % self.seller_gpg,
+                "secp256k1" : "%s" % self.seller_secp
+                }
+            }
+        }
+            
+                
+        self.buyerPart = {
+            "BuyerPart" : {
+
+            "Buyer_ID" : "%s" % self.buyer_nym,
+            "signatures" : {
+                "Hash" : "%s" % self.buyer_hashID,
+                "GPG" : "%s" % self.buyer_gpg,
+                "secp256k1" : "%s" % self.buyer_secp
+                }
+            }
+        }
+            
+        self.notaryPart = {
+            "NotaryPart" : {
+
+            "Notary_ID" : "%s" % self.notary_nym,
+            "signatures" : {
+                "Hash" : "%s" % self.notary_hashID,
+                "GPG" : "%s" % self.notary_gpg,
+                "secp256k1" : "%s" % self.notary_secp
+                }
+            }
+        }
+                                   
+    def getJSON(self):
+        # initialize containers
+        contract = OrderedDict()
+        gPart = self.genPart["GenesisPart"]
+        sPart = self.sellerPart["MerchantPart"]
+        bPart = self.buyerPart["BuyerPart"]
+        nPart = self.notaryPart["NotaryPart"]
+        result = None
+
+        # produce the contact depending on who has signed and not
+        # good for several use cases; note that these are
+        # made under the assumption that a notary will only be
+        # involved once both seller and buyer are present
+        contract["GenesisPart"] = gPart
+        
+        # standard "I list an item I want to sell"
+        if self.buyerPart["BuyerPart"]["Buyer_ID"] == "":
+            contract["MerchantPart"] = sPart
+            result = json.dumps(contract)
+            return result
+        # "This is something I want to buy at yea price"
+        elif self.sellerPart["MerchantPart"]["Merchant_ID"] == "":
+            contract["BuyerPart"] = bPart
+            result = json.dumps(contract)
+            return result
+        # triple signed contract
+        else:
+            contract["MerchantPart"] = sPart
+            contract["BuyerPart"] = bPart
+            result = json.dumps(contract)
+            return result
+
