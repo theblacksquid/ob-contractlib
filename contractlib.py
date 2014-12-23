@@ -223,3 +223,37 @@ class Contract:
             result = json.dumps(contract)
             return result
 
+def parseContract(contractObj):
+    rawContract = json.loads(str(contractObj))
+    contract = Contract(
+    
+    seller_nym = contract["MerchantPart"]["Merchant_ID"], 
+    seller_gpg = contract["MerchantPart"]["GPG"],
+    seller_secp = contract["MerchantPart"]["secp256k1"], 
+    seller_hashID = contract["MerchantPart"]["Hash"],
+    
+    buyer_nym = contract["BuyerPart"]["Buyer_ID"], 
+    buyer_gpg = contract["BuyerPart"]["GPG"],
+    buyer_secp = contract["BuyerPart"]["secp256k1"], 
+    buyer_hashID= contract["BuyerPart"]["Hash"],
+    
+    notary_nym = contract["NotaryPart"]["Notary_ID"], 
+    notary_gpg = contract["NotaryPart"]["GPG"],
+    notary_secp = contract["NotaryPart"]["secp256k1"], 
+    notary_hashID = contract["NotaryPart"]["Hash"],
+    
+    item = contract["GenesisPart"]["item_data"][], 
+    price=, 
+    condition="",
+    item_qty="", 
+    keywords="", 
+    region="",
+    ship_fee="", 
+    eta="", 
+    coin="",
+    item_img="",
+    
+    contract_exp="", contract_ver="",
+    item_category="", subCategory=""
+    
+    )
