@@ -1,5 +1,5 @@
 # WARNING!!! : Work-in-Prograss, full of placeholders
-
+# TO DO: REFACTOR TO LATEST CONTRACT FORMAT
 import contractlib
 
 class Trade:
