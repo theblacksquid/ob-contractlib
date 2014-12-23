@@ -224,24 +224,24 @@ class Contract:
             return result
 
 def parseContract(contractObj):
-    rawContract = json.loads(str(contractObj))
+    contract = json.loads(str(contractObj))
     
-    contract = Contract(
+    output = Contract(
     
     seller_nym = contract["MerchantPart"]["Merchant_ID"], 
-    seller_gpg = contract["MerchantPart"]["GPG"],
-    seller_secp = contract["MerchantPart"]["secp256k1"], 
-    seller_hashID = contract["MerchantPart"]["Hash"],
+    seller_gpg = contract["MerchantPart"]["Signatures"]["GPG"],
+    seller_secp = contract["MerchantPart"]["Signatures"]["secp256k1"], 
+    seller_hashID = contract["MerchantPart"]["Signatures"]["Hash"],
     
     buyer_nym = contract["BuyerPart"]["Buyer_ID"], 
-    buyer_gpg = contract["BuyerPart"]["GPG"],
-    buyer_secp = contract["BuyerPart"]["secp256k1"], 
-    buyer_hashID= contract["BuyerPart"]["Hash"],
+    buyer_gpg = contract["BuyerPart"]["Signatures"]["GPG"],
+    buyer_secp = contract["BuyerPart"]["Signatures"]["secp256k1"], 
+    buyer_hashID= contract["BuyerPart"]["Signatures"]["Hash"],
     
     notary_nym = contract["NotaryPart"]["Notary_ID"], 
-    notary_gpg = contract["NotaryPart"]["GPG"],
-    notary_secp = contract["NotaryPart"]["secp256k1"], 
-    notary_hashID = contract["NotaryPart"]["Hash"],
+    notary_gpg = contract["NotaryPart"]["Signatures"]["GPG"],
+    notary_secp = contract["NotaryPart"]["Signatures"]["secp256k1"], 
+    notary_hashID = contract["NotaryPart"]["Signatures"]["Hash"],
     
     item = contract["GenesisPart"]["item_data"]["item_title"], 
     price = contract["GenesisPart"]["item_data"]["btc_price"],
@@ -262,6 +262,6 @@ def parseContract(contractObj):
     subCategory = contract["GenesisPart"]["metadata"]["subCategory"]
     )
     
-    return contract
+    return output
 
 
