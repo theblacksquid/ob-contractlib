@@ -225,6 +225,7 @@ class Contract:
 
 def parseContract(contractObj):
     rawContract = json.loads(str(contractObj))
+    
     contract = Contract(
     
     seller_nym = contract["MerchantPart"]["Merchant_ID"], 
@@ -242,18 +243,25 @@ def parseContract(contractObj):
     notary_secp = contract["NotaryPart"]["secp256k1"], 
     notary_hashID = contract["NotaryPart"]["Hash"],
     
-    item = contract["GenesisPart"]["item_data"][], 
-    price=, 
-    condition="",
-    item_qty="", 
-    keywords="", 
-    region="",
-    ship_fee="", 
-    eta="", 
-    coin="",
-    item_img="",
-    
-    contract_exp="", contract_ver="",
-    item_category="", subCategory=""
-    
+    item = contract["GenesisPart"]["item_data"]["item_title"], 
+    price = contract["GenesisPart"]["item_data"]["btc_price"],
+    condition = contract["GenesisPart"]["item_data"]["item_condition"],
+    item_qty = contract["GenesisPart"]["item_data"]["quantity"], 
+    keywords = contract["GenesisPart"]["item_data"]["keywords"], 
+    region = contract["GenesisPart"]["item_data"]["region"],
+    ship_fee = contract["GenesisPart"]["item_data"]["shipping_fee"], 
+    eta = contract["GenesisPart"]["item_data"]["est_delivery"], 
+    #coin = contract["GenesisPart"]["item_data"], 
+    # make price a nested dict, showing the crypto, and fiat currencies
+    # used, and their equivalent amounts
+    item_img = contract["GenesisPart"]["item_data"]["item_image"],               
+   
+    contract_exp = contract["GenesisPart"]["metadata"]["Expiration_Date"], 
+    contract_ver = contract["GenesisPart"]["item_data"]["OBCv"],
+    item_category = contract["GenesisPart"]["metadata"]["Category"], 
+    subCategory = contract["GenesisPart"]["metadata"]["subCategory"]
     )
+    
+    return contract
+
+
