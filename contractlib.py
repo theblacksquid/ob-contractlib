@@ -47,7 +47,7 @@ class ContractPart:
                       "secp256k1" : self.secp
                       }
 # I apologize for the mess in advance
-class Contract():
+class Contract:
 
     def __init__(self, seller_nym="", seller_gpg="",
                  seller_secp="", seller_hashID="",
